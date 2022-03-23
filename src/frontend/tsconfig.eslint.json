@@ -1,0 +1,8 @@
+/* 
+  We use this tsconfig to avoid having eslint complain about files not being part of a project. 
+  See https://github.com/angular-eslint/angular-eslint/blob/4c11177e66cb54ba8d548ad7068990679c0c7e93/README.md#eslint-configs-and-performance
+*/
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*.ts"]
+}

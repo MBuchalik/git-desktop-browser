@@ -40,9 +40,7 @@
               "src/frontend/src/favicon.ico",
               "src/frontend/src/assets"
             ],
-            "styles": [
-              "src/frontend/src/styles.scss"
-            ],
+            "styles": ["src/frontend/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -108,9 +106,7 @@
               "src/frontend/src/favicon.ico",
               "src/frontend/src/assets"
             ],
-            "styles": [
-              "src/frontend/src/styles.scss"
-            ],
+            "styles": ["src/frontend/src/styles.scss"],
             "scripts": []
           }
         }
