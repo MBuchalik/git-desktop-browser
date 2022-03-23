@@ -30,5 +30,9 @@
     "editor.formatOnSave": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": ["source.fixAll.format", "source.fixAll.eslint"]
+  },
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
