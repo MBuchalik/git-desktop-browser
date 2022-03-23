@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "lint": "eslint src --max-warnings=0 && npm run lint-additional-files",
-    "lint-additional-files": "prettier --check **/*.{md,json,yml}"
+    "lint-additional-files": "prettier --check **/*.{md,json,yml} !.angular/**"
   },
   "dependencies": {
     "@angular/animations": "~13.3.0",
