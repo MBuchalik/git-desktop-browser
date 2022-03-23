@@ -2,11 +2,13 @@
   "name": "git-desktop-browser",
   "version": "0.0.1",
   "private": true,
+  "main": "src/main-process/main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --hmr",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "electron-start": "electron .",
     "lint": "eslint src --max-warnings=0 && npm run lint-additional-files",
     "lint-additional-files": "prettier --check **/*.{md,json,yml} !.angular/**"
   },
@@ -35,6 +37,7 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
+    "electron": "^17.1.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
