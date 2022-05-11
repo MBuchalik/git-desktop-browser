@@ -1,0 +1,29 @@
+<ul *ngIf="state.allBranches">
+  <li *ngFor="let branch of state.allBranches" (click)="selectBranch(branch)">
+    {{ branch }}
+  </li>
+</ul>
+
+<div>
+  <h3>Breadcrumbs</h3>
+  <span (click)="goToTreeRoot()">Root</span>
+  <span
+    *ngFor="
+      let item of state.lastKnownViewStateEntry.currentTreeOrBlobPath.path;
+      let i = index
+    "
+    (click)="goToTreeAtPathIndex(i)"
+  >
+    -- {{ item }}
+  </span>
+</div>
+
+<ng-container *ngIf="state.treeEntriesError"
+  >Failed to load the tree</ng-container
+>
+
+<div *ngFor="let item of state.treeEntries" (click)="selectSubTree(item.name)">
+  {{ item.name }}
+</div>
+
+<button (click)="leave()">Leave</button>

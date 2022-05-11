@@ -1,1 +1,7 @@
-git-desktop-browser
+<ng-container *ngIf="mainStateService.state.repoFolderPath === undefined">
+  <app-dashboard></app-dashboard>
+</ng-container>
+
+<ng-container *ngIf="mainStateService.state.repoFolderPath !== undefined">
+  <app-repo></app-repo>
+</ng-container>

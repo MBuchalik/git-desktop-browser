@@ -1,0 +1,5 @@
+<button (click)="openFolderPicker()">Open Folder Picker</button>
+
+<ng-container *ngIf="selectedFolderIsNotGitDirectory">
+  The selected folder is not a git directory.
+</ng-container>
