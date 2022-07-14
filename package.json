@@ -2,5 +2,11 @@
   "name": "git-desktop-browser",
   "version": "0.0.1",
   "private": true,
-  "workspaces": ["./frontend"]
+  "workspaces": [
+    "./frontend"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspaces && npm run lint-additional-files",
+    "lint-additional-files": "prettier --check **/*.{md,json,yml}"
+  }
 }
