@@ -1,6 +1,13 @@
-import { BrowserWindow, app } from 'electron';
+import { GitProcess, IGitExecutionOptions } from 'dugite';
+import {
+  BrowserWindow,
+  OpenDialogOptions,
+  app,
+  dialog,
+  ipcMain,
+} from 'electron';
 
-let mainWindow: BrowserWindow;
+let mainWindow: BrowserWindow | undefined;
 
 const createWindow = (): void => {
   mainWindow = new BrowserWindow({
@@ -28,3 +35,30 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipcMain.handle(
+  'dugite-execute',
+  async (
+    _event,
+    args: string[],
+    path: string,
+    options?: IGitExecutionOptions,
+  ) => {
+    const result = await GitProcess.exec(args, path, options);
+
+    return result;
+  },
+);
+
+ipcMain.handle(
+  'show-open-dialog',
+  async (_event, options: OpenDialogOptions) => {
+    if (!mainWindow) {
+      return undefined;
+    }
+
+    const result = await dialog.showOpenDialog(mainWindow, options);
+
+    return result;
+  },
+);

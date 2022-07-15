@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { MainView } from './components/main-view';
+
 const App: React.FC = () => {
-  return <div>Frontend</div>;
+  return <MainView />;
 };
 
 export default App;

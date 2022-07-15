@@ -12,6 +12,9 @@
     "lint-additional-files": "prettier --check **/*.{md,json,yml}",
     "electron-start": "npm run build -w=main-process && electron ."
   },
+  "dependencies": {
+    "dugite": "^1.110.0"
+  },
   "devDependencies": {
     "electron": "^19.0.8",
     "eslint-config-prettier": "^8.5.0",
