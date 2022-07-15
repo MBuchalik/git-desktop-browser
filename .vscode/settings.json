@@ -1,5 +1,5 @@
 {
-  "eslint.workingDirectories": ["./frontend"],
+  "eslint.workingDirectories": ["./main-process", "./renderer"],
   "eslint.validate": ["typescript"],
   "typescript.preferences.importModuleSpecifier": "relative",
   "[javascript]": {
