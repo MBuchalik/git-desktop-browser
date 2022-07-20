@@ -1,3 +1,5 @@
+import { GitBranchIcon, HomeFillIcon } from '@primer/octicons-react';
+import { ActionList, ActionMenu, Header, StyledOcticon } from '@primer/react';
 import React from 'react';
 
 import { getAllBranches } from '../../ipc/git/branch';
@@ -11,15 +13,31 @@ export const RepoPage: React.FC<Props> = (props) => {
   const controller = useController(props);
 
   return (
-    <div>
-      Repo Page
-      <button type="button" onClick={(): void => props.close()}>
-        Close
-      </button>
-      {controller.state.branches.map((branch) => (
-        <span key={branch}>{branch}</span>
-      ))}
-    </div>
+    <React.Fragment>
+      <Header>
+        <Header.Item>
+          <Header.Link onClick={(): void => props.close()}>
+            <StyledOcticon icon={HomeFillIcon} />
+          </Header.Link>
+        </Header.Item>
+      </Header>
+
+      <div>
+        <ActionMenu>
+          <ActionMenu.Button leadingIcon={GitBranchIcon}>
+            Select Branch
+          </ActionMenu.Button>
+
+          <ActionMenu.Overlay height="xsmall" sx={{ overflowY: 'auto' }}>
+            <ActionList>
+              {controller.state.branches.map((branch) => (
+                <ActionList.Item key={branch}>{branch}</ActionList.Item>
+              ))}
+            </ActionList>
+          </ActionMenu.Overlay>
+        </ActionMenu>
+      </div>
+    </React.Fragment>
   );
 };
 
