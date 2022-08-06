@@ -46,9 +46,17 @@ async function getRepoRootPathOfNonBareRepo(
     };
   }
 
+  // It seems like there can be a newline character. (Maybe, there can be multiple lines? Not sure about that.)
+  const resultFolderPath = dugiteResult.stdout.split('\n')[0];
+  if (resultFolderPath === undefined) {
+    return {
+      success: false,
+    };
+  }
+
   return {
     success: true,
-    data: dugiteResult.stdout,
+    data: resultFolderPath,
   };
 }
 
