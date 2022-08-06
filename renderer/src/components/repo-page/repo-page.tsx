@@ -199,6 +199,11 @@ function useController(props: Props): Controller {
     treeOrBlobContent: undefined,
   });
 
+  // Whenever a new tree or blob is loaded, scroll the page to the top.
+  React.useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [state.treeOrBlobContent]);
+
   React.useEffect((): void => {
     void (async (): Promise<void> => {
       const branchesFetchResult = await getAllBranches(props.repoRootPath);
