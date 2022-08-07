@@ -115,6 +115,7 @@ module.exports = {
           },
         ],
         'no-unreachable-loop': 'error',
+        'object-shorthand': ['warn', 'never'],
         radix: 'error',
         'require-atomic-updates': 'error',
         'sort-imports': [
