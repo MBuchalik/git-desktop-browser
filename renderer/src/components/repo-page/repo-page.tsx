@@ -1,24 +1,19 @@
-import {
-  FileDirectoryFillIcon,
-  FileIcon,
-  GitBranchIcon,
-  HomeFillIcon,
-} from '@primer/octicons-react';
+import { GitBranchIcon, HomeFillIcon } from '@primer/octicons-react';
 import {
   ActionList,
   ActionMenu,
   Breadcrumbs,
   Header,
-  Link,
   PageLayout,
   StyledOcticon,
 } from '@primer/react';
 import classNames from 'classnames';
 import React from 'react';
 
-import { getBlob } from '../../ipc/git/blob';
 import { getAllBranches } from '../../ipc/git/branch';
-import { TreeEntry, getTreeByPath } from '../../ipc/git/tree';
+
+import { BlobDetails } from './blob-details';
+import { TreeDetails } from './tree-details';
 
 interface Props {
   repoRootPath: string;
@@ -72,7 +67,7 @@ export const RepoPage: React.FC<Props> = (props) => {
                 <Breadcrumbs>
                   <Breadcrumbs.Item
                     sx={{ cursor: 'pointer' }}
-                    onClick={(): void => controller.selectParentPath([])}
+                    onClick={(): void => controller.setSelectedPath([], 'tree')}
                   >
                     root
                   </Breadcrumbs.Item>
@@ -88,11 +83,12 @@ export const RepoPage: React.FC<Props> = (props) => {
                           <Breadcrumbs.Item
                             sx={{ cursor: 'pointer' }}
                             onClick={(): void =>
-                              controller.selectParentPath(
+                              controller.setSelectedPath(
                                 controller.state.selectedPath.pathItems.slice(
                                   0,
                                   index + 1,
                                 ),
+                                'tree',
                               )
                             }
                           >
@@ -107,47 +103,42 @@ export const RepoPage: React.FC<Props> = (props) => {
             )}
           </div>
 
-          {controller.sortedTreeContent !== undefined && (
-            <div className={classNames('Box')}>
-              {controller.sortedTreeContent.map((treeItem) => (
-                <div
-                  key={`${treeItem.hash}-${treeItem.name}`}
-                  className={classNames(
-                    'Box-row',
-                    'py-2',
-                    'd-flex',
-                    'flex-items-center',
-                  )}
-                >
-                  <div className={classNames('pr-2')}>
-                    {treeItem.type === 'blob' ? (
-                      <StyledOcticon icon={FileIcon} />
-                    ) : (
-                      <StyledOcticon
-                        icon={FileDirectoryFillIcon}
-                        color="accent.muted"
-                      />
-                    )}
-                  </div>
+          {controller.state.selectedBranch !== undefined && (
+            <React.Fragment>
+              {controller.state.selectedPath.type === 'tree' && (
+                <TreeDetails
+                  repoRootPath={props.repoRootPath}
+                  branch={controller.state.selectedBranch}
+                  treePath={controller.state.selectedPath.pathItems}
+                  selectChildTree={(childTreeName: string): void =>
+                    controller.setSelectedPath(
+                      [
+                        ...controller.state.selectedPath.pathItems,
+                        childTreeName,
+                      ],
+                      'tree',
+                    )
+                  }
+                  selectChildBlob={(childBlobName: string): void =>
+                    controller.setSelectedPath(
+                      [
+                        ...controller.state.selectedPath.pathItems,
+                        childBlobName,
+                      ],
+                      'blob',
+                    )
+                  }
+                />
+              )}
 
-                  <div>
-                    <Link
-                      as="button"
-                      className={classNames('Link--primary')}
-                      onClick={(): void =>
-                        controller.selectChildTreeItem(treeItem)
-                      }
-                    >
-                      {treeItem.name}
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {controller.state.treeOrBlobContent?.type === 'blob' && (
-            <pre>{controller.state.treeOrBlobContent.content}</pre>
+              {controller.state.selectedPath.type === 'blob' && (
+                <BlobDetails
+                  repoRootPath={props.repoRootPath}
+                  branch={controller.state.selectedBranch}
+                  blobPath={controller.state.selectedPath.pathItems}
+                />
+              )}
+            </React.Fragment>
           )}
         </PageLayout.Content>
       </PageLayout>
@@ -164,45 +155,28 @@ const ROOT_PATH: Path = {
   pathItems: [],
 };
 
-type TreeOrBlobContent = TreeContent | BlobContent;
-interface TreeContent {
-  type: 'tree';
-  content: TreeEntry[];
-}
-interface BlobContent {
-  type: 'blob';
-  content: string;
-}
-
 interface State {
   branches: string[];
   selectedBranch: string | undefined;
   selectedPath: Path;
-
-  treeOrBlobContent: TreeOrBlobContent | undefined;
 }
 interface Controller {
   state: State;
 
-  sortedTreeContent: TreeEntry[] | undefined;
-
   setSelectedBranch: (branch: string) => void;
-
-  selectChildTreeItem: (childTreeItem: TreeEntry) => void;
-  selectParentPath: (fullPath: string[]) => void;
+  setSelectedPath: (fullPath: string[], itemType: 'tree' | 'blob') => void;
 }
 function useController(props: Props): Controller {
   const [state, setState] = React.useState<State>({
     branches: [],
     selectedBranch: undefined,
     selectedPath: ROOT_PATH,
-    treeOrBlobContent: undefined,
   });
 
-  // Whenever a new tree or blob is loaded, scroll the page to the top.
+  // Whenever the selected path or branch changes, scroll the page to the top.
   React.useLayoutEffect(() => {
     window.scrollTo(0, 0);
-  }, [state.treeOrBlobContent]);
+  }, [state.selectedBranch, state.selectedPath]);
 
   React.useEffect((): void => {
     void (async (): Promise<void> => {
@@ -215,73 +189,8 @@ function useController(props: Props): Controller {
     })();
   }, [props.repoRootPath]);
 
-  React.useEffect((): void => {
-    void (async (): Promise<void> => {
-      if (state.selectedBranch === undefined) {
-        return;
-      }
-
-      if (state.selectedPath.type === 'blob') {
-        const blobFetchResult = await getBlob({
-          repoFolderPath: props.repoRootPath,
-          commitIsh: state.selectedBranch,
-          blobPath: state.selectedPath.pathItems,
-        });
-        if (!blobFetchResult.success) {
-          return;
-        }
-        setState((state) => ({
-          ...state,
-          treeOrBlobContent: { type: 'blob', content: blobFetchResult.data },
-        }));
-        return;
-      }
-
-      const treeFetchResult = await getTreeByPath({
-        repoFolderPath: props.repoRootPath,
-        commitIsh: state.selectedBranch,
-        treePath: state.selectedPath.pathItems,
-      });
-      if (!treeFetchResult.success) {
-        return;
-      }
-
-      setState((state) => ({
-        ...state,
-        treeOrBlobContent: { type: 'tree', content: treeFetchResult.data },
-      }));
-    })();
-  }, [
-    props.repoRootPath,
-    state.selectedBranch,
-    state.selectedPath.pathItems,
-    state.selectedPath.type,
-  ]);
-
-  const sortedTreeContent = React.useMemo((): TreeEntry[] | undefined => {
-    if (!state.treeOrBlobContent || state.treeOrBlobContent.type !== 'tree') {
-      return undefined;
-    }
-
-    const treeContentCopy = [...state.treeOrBlobContent.content];
-    treeContentCopy.sort((a, b) => {
-      if (a.type === 'tree' && b.type === 'blob') {
-        return -1;
-      }
-      if (a.type === 'blob' && b.type === 'tree') {
-        return 1;
-      }
-
-      return a.name.localeCompare(b.name);
-    });
-
-    return treeContentCopy;
-  }, [state.treeOrBlobContent]);
-
   return {
     state: state,
-
-    sortedTreeContent: sortedTreeContent,
 
     setSelectedBranch: (branch): void => {
       setState((state) => ({
@@ -291,21 +200,10 @@ function useController(props: Props): Controller {
       }));
     },
 
-    selectChildTreeItem: (childTreeItem): void => {
-      setState((state): State => {
-        const newPath: Path = {
-          type: childTreeItem.type,
-          pathItems: [...state.selectedPath.pathItems, childTreeItem.name],
-        };
-
-        return { ...state, selectedPath: newPath };
-      });
-    },
-
-    selectParentPath: (fullPath): void => {
+    setSelectedPath: (fullPath, itemType): void => {
       setState((state) => ({
         ...state,
-        selectedPath: { type: 'tree', pathItems: fullPath },
+        selectedPath: { pathItems: fullPath, type: itemType },
       }));
     },
   };
