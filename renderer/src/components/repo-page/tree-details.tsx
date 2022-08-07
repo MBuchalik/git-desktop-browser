@@ -30,13 +30,13 @@ export const TreeDetails: React.FC<Props> = (props) => {
                 'flex-items-center',
               )}
             >
-              <div className={classNames('pr-2')}>
+              <div className={classNames('pr-3')}>
                 {treeItem.type === 'blob' ? (
-                  <StyledOcticon icon={FileIcon} />
+                  <StyledOcticon icon={FileIcon} color="fg.muted" />
                 ) : (
                   <StyledOcticon
                     icon={FileDirectoryFillIcon}
-                    color="accent.muted"
+                    sx={{ color: 'var(--color-scale-blue-3)' }}
                   />
                 )}
               </div>
