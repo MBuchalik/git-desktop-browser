@@ -2,12 +2,12 @@ import { GitBranchIcon, HomeFillIcon } from '@primer/octicons-react';
 import {
   ActionList,
   ActionMenu,
+  Box,
   Breadcrumbs,
   Header,
   PageLayout,
   StyledOcticon,
 } from '@primer/react';
-import classNames from 'classnames';
 import React from 'react';
 
 import { getAllBranches } from '../../ipc/git/branch';
@@ -35,8 +35,8 @@ export const RepoPage: React.FC<Props> = (props) => {
 
       <PageLayout containerWidth="large">
         <PageLayout.Content>
-          <div className={classNames('mb-3', 'd-flex', 'flex-items-center')}>
-            <div>
+          <Box sx={{ marginBottom: 3, display: 'flex', alignItems: 'center' }}>
+            <Box>
               <ActionMenu>
                 <ActionMenu.Button leadingIcon={GitBranchIcon}>
                   {controller.state.selectedBranch === undefined
@@ -60,10 +60,10 @@ export const RepoPage: React.FC<Props> = (props) => {
                   </ActionList>
                 </ActionMenu.Overlay>
               </ActionMenu>
-            </div>
+            </Box>
 
             {controller.state.selectedPath.pathItems.length > 0 && (
-              <div className={classNames('ml-2')}>
+              <Box sx={{ marginLeft: 2 }}>
                 <Breadcrumbs>
                   <Breadcrumbs.Item
                     sx={{ cursor: 'pointer' }}
@@ -99,9 +99,9 @@ export const RepoPage: React.FC<Props> = (props) => {
                     ),
                   )}
                 </Breadcrumbs>
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {controller.state.selectedBranch !== undefined && (
             <React.Fragment>

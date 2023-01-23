@@ -1,5 +1,5 @@
 import { FileDirectoryFillIcon, FileIcon } from '@primer/octicons-react';
-import { Link, StyledOcticon } from '@primer/react';
+import { Box, Link, StyledOcticon } from '@primer/react';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -19,18 +19,18 @@ export const TreeDetails: React.FC<Props> = (props) => {
   return (
     <React.Fragment>
       {controller.sortedTreeContent !== undefined && (
-        <div className={classNames('Box')}>
+        <Box className={classNames('Box')}>
           {controller.sortedTreeContent.map((treeItem) => (
-            <div
+            <Box
               key={`${treeItem.hash}-${treeItem.name}`}
-              className={classNames(
-                'Box-row',
-                'py-2',
-                'd-flex',
-                'flex-items-center',
-              )}
+              sx={{
+                paddingY: 2,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              className={classNames('Box-row')}
             >
-              <div className={classNames('pr-3')}>
+              <Box sx={{ paddingRight: 3 }}>
                 {treeItem.type === 'blob' ? (
                   <StyledOcticon icon={FileIcon} color="fg.muted" />
                 ) : (
@@ -39,9 +39,9 @@ export const TreeDetails: React.FC<Props> = (props) => {
                     sx={{ color: 'var(--color-scale-blue-3)' }}
                   />
                 )}
-              </div>
+              </Box>
 
-              <div>
+              <Box>
                 <Link
                   as="button"
                   className={classNames('Link--primary')}
@@ -53,10 +53,10 @@ export const TreeDetails: React.FC<Props> = (props) => {
                 >
                   {treeItem.name}
                 </Link>
-              </div>
-            </div>
+              </Box>
+            </Box>
           ))}
-        </div>
+        </Box>
       )}
     </React.Fragment>
   );

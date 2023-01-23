@@ -41,11 +41,11 @@ function useController(props: Props): Controller {
     ];
 
     if (props.fileExtension !== undefined) {
-      const lanugageSupport = getLanguageSupportForFileExtension(
+      const languageSupport = getLanguageSupportForFileExtension(
         props.fileExtension,
       );
-      if (lanugageSupport) {
-        extensions.push(lanugageSupport);
+      if (languageSupport) {
+        extensions.push(languageSupport);
       }
     }
 
@@ -69,13 +69,13 @@ function getLanguageSupportForFileExtension(
   fileExtension: string,
 ): LanguageSupport | undefined {
   const jsExtensions = new Set(['.js', '.jsx', '.ts', '.tsx']);
-  const jsonExtensinos = new Set(['.json', '.jsonc']);
+  const jsonExtensions = new Set(['.json', '.jsonc']);
   const markdownExtensions = new Set(['.md']);
 
   if (jsExtensions.has(fileExtension)) {
     return javascript();
   }
-  if (jsonExtensinos.has(fileExtension)) {
+  if (jsonExtensions.has(fileExtension)) {
     return json();
   }
   if (markdownExtensions.has(fileExtension)) {
