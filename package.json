@@ -13,14 +13,11 @@
     "electron-start": "npm run build -w=main-process && electron ."
   },
   "dependencies": {
-    "dugite": "^1.110.0"
+    "dugite": "^2.3.0"
   },
   "devDependencies": {
-    "electron": "^19.0.8",
+    "electron": "^22.0.3",
     "eslint-config-mbuchalik": "^1.1.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.4"
   }
 }

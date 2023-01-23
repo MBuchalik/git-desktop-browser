@@ -9,23 +9,23 @@
     "lint": "eslint src --max-warnings=0"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.0.2",
-    "@codemirror/lang-json": "^6.0.0",
-    "@codemirror/lang-markdown": "^6.0.1",
-    "@primer/css": "^20.4.1",
-    "@primer/react": "^35.4.0",
-    "classnames": "^2.3.1",
+    "@codemirror/lang-javascript": "^6.1.2",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lang-markdown": "^6.0.5",
+    "@primer/css": "^20.8.0",
+    "@primer/react": "^35.17.0",
+    "classnames": "^2.3.2",
     "codemirror": "^6.0.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "@types/node": "^16.11.44",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
-    "@types/styled-components": "5.1.11",
-    "sass": "^1.54.3"
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@types/styled-components": "5.1.26",
+    "sass": "^1.57.1"
   }
 }
