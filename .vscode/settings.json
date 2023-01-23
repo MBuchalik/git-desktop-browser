@@ -1,7 +1,14 @@
 {
-  "eslint.workingDirectories": ["./main-process", "./renderer"],
   "eslint.validate": ["typescript"],
   "typescript.preferences.importModuleSpecifier": "relative",
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dockercompose]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[javascript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
