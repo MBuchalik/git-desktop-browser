@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "electron": "^19.0.8",
+    "eslint-config-mbuchalik": "^1.1.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",

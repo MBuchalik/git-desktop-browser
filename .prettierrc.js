@@ -1,4 +1,1 @@
-module.exports = {
-  singleQuote: true,
-  trailingComma: 'all',
-};
+module.exports = require('eslint-config-mbuchalik/.prettierrc.js');
