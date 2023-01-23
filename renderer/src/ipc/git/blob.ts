@@ -1,4 +1,5 @@
-import { Result } from '../../models/result';
+import { Result } from 'micro-result';
+
 import { runDugiteCommand } from '../ipc-bridge';
 
 function buildBlobRef(commitIsh: string, blobPath: string[]): string {
