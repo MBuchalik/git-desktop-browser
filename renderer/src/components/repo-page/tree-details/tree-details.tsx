@@ -1,9 +1,10 @@
-import { FileDirectoryFillIcon, FileIcon } from '@primer/octicons-react';
-import { Box, Link, StyledOcticon } from '@primer/react';
+import { Box } from '@primer/react';
 import classNames from 'classnames';
 import React from 'react';
 
-import { TreeEntry, getTreeByPath } from '../../ipc/git/tree';
+import { TreeEntry, getTreeByPath } from '../../../ipc/git/tree';
+
+import { TreeDetailsItem } from './tree-details-item';
 
 interface Props {
   repoRootPath: string;
@@ -21,40 +22,18 @@ export const TreeDetails: React.FC<Props> = (props) => {
       {controller.sortedTreeContent !== undefined && (
         <Box className={classNames('Box')}>
           {controller.sortedTreeContent.map((treeItem) => (
-            <Box
+            <TreeDetailsItem
               key={`${treeItem.hash}-${treeItem.name}`}
-              sx={{
-                paddingY: 2,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              className={classNames('Box-row')}
-            >
-              <Box sx={{ paddingRight: 3 }}>
-                {treeItem.type === 'blob' ? (
-                  <StyledOcticon icon={FileIcon} color="fg.muted" />
-                ) : (
-                  <StyledOcticon
-                    icon={FileDirectoryFillIcon}
-                    sx={{ color: 'var(--color-scale-blue-3)' }}
-                  />
-                )}
-              </Box>
-
-              <Box>
-                <Link
-                  as="button"
-                  className={classNames('Link--primary')}
-                  onClick={(): void =>
-                    treeItem.type === 'blob'
-                      ? props.selectChildBlob(treeItem.name)
-                      : props.selectChildTree(treeItem.name)
-                  }
-                >
-                  {treeItem.name}
-                </Link>
-              </Box>
-            </Box>
+              repoRootPath={props.repoRootPath}
+              branch={props.branch}
+              treeItem={treeItem}
+              treeItemPath={[...props.treePath, treeItem.name]}
+              onClick={(): void =>
+                treeItem.type === 'blob'
+                  ? props.selectChildBlob(treeItem.name)
+                  : props.selectChildTree(treeItem.name)
+              }
+            />
           ))}
         </Box>
       )}

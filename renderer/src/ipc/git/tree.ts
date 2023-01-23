@@ -2,31 +2,20 @@ import { Result } from 'micro-result';
 
 import { runDugiteCommand } from '../ipc-bridge';
 
+import { buildBlobOrTreeRef } from './common';
+
 export interface TreeEntry {
   type: 'tree' | 'blob';
   hash: string;
   name: string;
 }
 
-function buildTreeRef(
-  commitIsh: string,
-  treePath: ReadonlyArray<string>,
-): string {
-  if (treePath.length < 1) {
-    return commitIsh;
-  }
-
-  const treePathAsString = treePath.join('/');
-
-  return `${commitIsh}:${treePathAsString}`;
-}
-
 export async function getTreeByPath(params: {
   repoFolderPath: string;
   commitIsh: string;
-  treePath: ReadonlyArray<string>;
+  treePath: string[];
 }): Promise<Result<TreeEntry[]>> {
-  const treeRef = buildTreeRef(params.commitIsh, params.treePath);
+  const treeRef = buildBlobOrTreeRef(params.commitIsh, params.treePath);
 
   const dugiteResult = await runDugiteCommand(
     ['ls-tree', treeRef, '-z'],
