@@ -7,6 +7,9 @@
 @import '~@primer/css/color-modes/index.scss';
 @import '~@primer/css/utilities/index.scss';
 
+@import 'highlight.js/styles/github.css';
+@import 'diff2html/bundles/css/diff2html.min.css';
+
 body {
   overflow-x: hidden;
 

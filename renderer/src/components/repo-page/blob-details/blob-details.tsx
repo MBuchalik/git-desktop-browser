@@ -1,8 +1,9 @@
+import { Box, Button } from '@primer/react';
 import React from 'react';
 
-import { getBlob } from '../../ipc/git/blob';
-
-import { CodeViewer } from './code-viewer';
+import { getBlob } from '../../../ipc/git/blob';
+import { CodeViewer } from '../code-viewer';
+import { History } from '../history';
 
 interface Props {
   repoRootPath: string;
@@ -14,24 +15,41 @@ export const BlobDetails: React.FC<Props> = (props) => {
 
   return (
     <React.Fragment>
-      {controller.state.blobContent !== undefined && (
-        <React.Fragment>
-          {controller.isProbablyBinaryFile ? (
-            <span>This seems to be a binary file.</span>
-          ) : (
-            <CodeViewer
-              code={controller.state.blobContent}
-              fileExtension={controller.fileExtension}
-            />
-          )}
-        </React.Fragment>
+      <Box sx={{ display: 'flex', justifyContent: 'end', marginBottom: 2 }}>
+        <Button onClick={(): void => controller.toggleShowHistory()}>
+          {controller.state.showHistory ? 'Code' : 'History'}
+        </Button>
+      </Box>
+
+      {controller.state.showHistory && (
+        <History
+          repoRootPath={props.repoRootPath}
+          commitIsh={props.branch}
+          itemPath={props.blobPath}
+        />
       )}
+
+      {!controller.state.showHistory &&
+        controller.state.blobContent !== undefined && (
+          <React.Fragment>
+            {controller.isProbablyBinaryFile ? (
+              <span>This seems to be a binary file.</span>
+            ) : (
+              <CodeViewer
+                code={controller.state.blobContent}
+                fileExtension={controller.fileExtension}
+              />
+            )}
+          </React.Fragment>
+        )}
     </React.Fragment>
   );
 };
 
 interface State {
   blobContent: string | undefined;
+
+  showHistory: boolean;
 }
 interface Controller {
   state: State;
@@ -41,10 +59,14 @@ interface Controller {
    * The file extension including a dot.
    */
   fileExtension: string | undefined;
+
+  toggleShowHistory: () => void;
 }
 function useController(props: Props): Controller {
   const [state, setState] = React.useState<State>({
     blobContent: undefined,
+
+    showHistory: false,
   });
 
   React.useEffect((): void => {
@@ -103,5 +125,9 @@ function useController(props: Props): Controller {
 
     isProbablyBinaryFile: isProbablyBinaryFile,
     fileExtension: fileExtension,
+
+    toggleShowHistory: (): void => {
+      setState((state) => ({ ...state, showHistory: !state.showHistory }));
+    },
   };
 }
