@@ -1,7 +1,6 @@
 import { FileDirectoryFillIcon, FileIcon } from '@primer/octicons-react';
-import { Box, Link, StyledOcticon } from '@primer/react';
+import { Box, Link, RelativeTime, StyledOcticon } from '@primer/react';
 import classNames from 'classnames';
-import { DateTime } from 'luxon';
 import React from 'react';
 
 import {
@@ -95,7 +94,13 @@ export const TreeDetailsItem: React.FC<Props> = (props) => {
             </Box>
 
             <Box sx={{ flexGrow: 0, flexShrink: 0 }}>
-              {formatTime(controller.state.commitDetails.authorDate)}
+              <RelativeTime
+                date={
+                  new Date(controller.state.commitDetails.authorDate * 1000)
+                }
+                format="relative"
+                tense="past"
+              />
             </Box>
           </React.Fragment>
         )}
@@ -156,10 +161,4 @@ function useController(props: Props): Controller {
       setState((state) => ({ ...state, showCommitDetailsDialog: show }));
     },
   };
-}
-
-function formatTime(timeStamp: number): string {
-  const dateTime = DateTime.fromSeconds(timeStamp);
-
-  return dateTime.toRelative({ locale: 'en' }) ?? '';
 }
