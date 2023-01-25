@@ -28,7 +28,10 @@ export const TreeDetails: React.FC<Props> = (props) => {
           </Box>
 
           {controller.state.showHistory && (
-            <History itemPath={props.treePath} />
+            <History
+              itemPath={props.treePath}
+              leaveHistory={(): void => controller.toggleShowHistory()}
+            />
           )}
 
           {!controller.state.showHistory && (

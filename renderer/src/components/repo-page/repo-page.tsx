@@ -51,7 +51,7 @@ export const RepoPage: React.FC<Props> = (props) => {
                 <Breadcrumbs>
                   <Breadcrumbs.Item
                     sx={{ cursor: 'pointer' }}
-                    onClick={(): void => controller.setSelectedPath([], 'tree')}
+                    onClick={(): void => controller.setSelectedPath(ROOT_PATH)}
                   >
                     root
                   </Breadcrumbs.Item>
@@ -67,13 +67,14 @@ export const RepoPage: React.FC<Props> = (props) => {
                           <Breadcrumbs.Item
                             sx={{ cursor: 'pointer' }}
                             onClick={(): void =>
-                              controller.setSelectedPath(
-                                controller.state.selectedPath.pathItems.slice(
-                                  0,
-                                  index + 1,
-                                ),
-                                'tree',
-                              )
+                              controller.setSelectedPath({
+                                pathItems:
+                                  controller.state.selectedPath.pathItems.slice(
+                                    0,
+                                    index + 1,
+                                  ),
+                                type: 'tree',
+                              })
                             }
                           >
                             {item}
@@ -91,27 +92,33 @@ export const RepoPage: React.FC<Props> = (props) => {
             <RepoServiceContextProvider
               repoFolderPath={props.repoFolderPath}
               selectedCommitIsh={controller.state.selectedCommitIsh}
+              setSelectedCommitIsh={(commitIsh, navigateToRepoRoot): void => {
+                controller.setSelectedCommitIsh(commitIsh);
+                if (navigateToRepoRoot === true) {
+                  controller.setSelectedPath(ROOT_PATH);
+                }
+              }}
             >
               {controller.state.selectedPath.type === 'tree' && (
                 <TreeDetails
                   treePath={controller.state.selectedPath.pathItems}
                   selectChildTree={(childTreeName: string): void =>
-                    controller.setSelectedPath(
-                      [
+                    controller.setSelectedPath({
+                      pathItems: [
                         ...controller.state.selectedPath.pathItems,
                         childTreeName,
                       ],
-                      'tree',
-                    )
+                      type: 'tree',
+                    })
                   }
                   selectChildBlob={(childBlobName: string): void =>
-                    controller.setSelectedPath(
-                      [
+                    controller.setSelectedPath({
+                      pathItems: [
                         ...controller.state.selectedPath.pathItems,
                         childBlobName,
                       ],
-                      'blob',
-                    )
+                      type: 'blob',
+                    })
                   }
                 />
               )}
@@ -146,7 +153,7 @@ interface Controller {
   state: State;
 
   setSelectedCommitIsh: (commitIsh: string) => void;
-  setSelectedPath: (fullPath: string[], itemType: 'tree' | 'blob') => void;
+  setSelectedPath: (path: Path) => void;
 }
 function useController(props: Props): Controller {
   const [state, setState] = React.useState<State>({
@@ -190,10 +197,10 @@ function useController(props: Props): Controller {
       }));
     },
 
-    setSelectedPath: (fullPath, itemType): void => {
+    setSelectedPath: (path): void => {
       setState((state) => ({
         ...state,
-        selectedPath: { pathItems: fullPath, type: itemType },
+        selectedPath: path,
       }));
     },
   };

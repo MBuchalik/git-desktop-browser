@@ -6,6 +6,7 @@ import { createFormatter } from './util/formatter';
 
 export interface ShortCommitDetails {
   longCommitHash: string;
+  shortCommitHash: string;
   authorDate: number;
   authorEmail: string;
   subject: string;
@@ -19,6 +20,7 @@ export async function getCommitHistory(params: {
 }): Promise<Result<ShortCommitDetails[]>> {
   const formatter = createFormatter({
     longCommitHash: '%H',
+    shortCommitHash: '%h',
     authorDate: '%at',
     authorEmail: '%ae',
     subject: '%s',

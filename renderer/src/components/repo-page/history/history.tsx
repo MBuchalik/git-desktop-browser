@@ -10,6 +10,8 @@ import { HistoryItem } from './history-item';
 
 interface Props {
   itemPath: string[];
+
+  leaveHistory: () => void;
 }
 export const History: React.FC<Props> = (props) => {
   const controller = useController(props);
@@ -33,6 +35,7 @@ export const History: React.FC<Props> = (props) => {
                       <HistoryItem
                         key={singleCommit.longCommitHash}
                         commit={singleCommit}
+                        leaveHistory={(): void => props.leaveHistory()}
                       />
                     ))}
                   </Box>

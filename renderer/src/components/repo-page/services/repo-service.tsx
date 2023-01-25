@@ -3,11 +3,17 @@ import React from 'react';
 interface RepoService {
   repoFolderPath: string;
   selectedCommitIsh: string;
+
+  setSelectedCommitIsh: (
+    commitIsh: string,
+    navigateToRepoRoot?: boolean,
+  ) => void;
 }
 function useRepoService(props: Props): RepoService {
   return {
     repoFolderPath: props.repoFolderPath,
     selectedCommitIsh: props.selectedCommitIsh,
+    setSelectedCommitIsh: props.setSelectedCommitIsh,
   };
 }
 
@@ -18,6 +24,10 @@ const RepoServiceContext = React.createContext<RepoService | undefined>(
 interface Props {
   repoFolderPath: string;
   selectedCommitIsh: string;
+  setSelectedCommitIsh: (
+    commitIsh: string,
+    navigateToRepoRoot?: boolean,
+  ) => void;
 
   children?: React.ReactNode;
 }

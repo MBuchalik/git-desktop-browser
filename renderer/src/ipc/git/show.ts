@@ -16,6 +16,7 @@ export async function getCommitDetails(params: {
 }): Promise<Result<CommitDetailsWithBody>> {
   const formatter = createFormatter({
     longCommitHash: '%H',
+    shortCommitHash: '%h',
     authorDate: '%at',
     authorEmail: '%ae',
     subject: '%s',

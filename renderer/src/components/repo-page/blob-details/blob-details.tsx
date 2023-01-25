@@ -20,7 +20,12 @@ export const BlobDetails: React.FC<Props> = (props) => {
         </Button>
       </Box>
 
-      {controller.state.showHistory && <History itemPath={props.blobPath} />}
+      {controller.state.showHistory && (
+        <History
+          itemPath={props.blobPath}
+          leaveHistory={(): void => controller.toggleShowHistory()}
+        />
+      )}
 
       {!controller.state.showHistory &&
         controller.state.blobContent !== undefined && (
