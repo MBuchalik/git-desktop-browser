@@ -6,12 +6,10 @@ import { ShortCommitDetails } from '../../../ipc/git/log';
 import { CommitDetailsDialog } from '../commit-details-dialog';
 
 interface Props {
-  repoRootPath: string;
-
   commit: ShortCommitDetails;
 }
 export const HistoryItem: React.FC<Props> = (props) => {
-  const controller = useController(props);
+  const controller = useController();
 
   return (
     <Box
@@ -43,7 +41,6 @@ export const HistoryItem: React.FC<Props> = (props) => {
 
       {controller.state.showCommitDetailsDialog && (
         <CommitDetailsDialog
-          repoRootPath={props.repoRootPath}
           commitIsh={props.commit.longCommitHash}
           hide={(): void => controller.setShowCommitDetailsDialog(false)}
         />
@@ -60,7 +57,7 @@ interface Controller {
 
   setShowCommitDetailsDialog: (show: boolean) => void;
 }
-function useController(props: Props): Controller {
+function useController(): Controller {
   const [state, setState] = React.useState<State>({
     showCommitDetailsDialog: false,
   });

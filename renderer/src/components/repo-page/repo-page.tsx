@@ -1,7 +1,5 @@
-import { GitBranchIcon, HomeFillIcon } from '@primer/octicons-react';
+import { HomeFillIcon } from '@primer/octicons-react';
 import {
-  ActionList,
-  ActionMenu,
   Box,
   Breadcrumbs,
   Header,
@@ -10,13 +8,15 @@ import {
 } from '@primer/react';
 import React from 'react';
 
-import { getAllBranches } from '../../ipc/git/branch';
+import { doesPathExist } from '../../ipc/git/show';
 
 import { BlobDetails } from './blob-details';
+import { CommitIshSelector } from './commitish-selector';
+import { RepoServiceContextProvider } from './services/repo-service';
 import { TreeDetails } from './tree-details';
 
 interface Props {
-  repoRootPath: string;
+  repoFolderPath: string;
 
   close: () => void;
 }
@@ -37,29 +37,13 @@ export const RepoPage: React.FC<Props> = (props) => {
         <PageLayout.Content>
           <Box sx={{ marginBottom: 3, display: 'flex', alignItems: 'center' }}>
             <Box>
-              <ActionMenu>
-                <ActionMenu.Button leadingIcon={GitBranchIcon}>
-                  {controller.state.selectedBranch === undefined
-                    ? 'Select Branch'
-                    : controller.state.selectedBranch}
-                </ActionMenu.Button>
-
-                <ActionMenu.Overlay height="xsmall" sx={{ overflowY: 'auto' }}>
-                  <ActionList selectionVariant="single">
-                    {controller.state.branches.map((branch) => (
-                      <ActionList.Item
-                        key={branch}
-                        selected={branch === controller.state.selectedBranch}
-                        onSelect={(): void =>
-                          controller.setSelectedBranch(branch)
-                        }
-                      >
-                        {branch}
-                      </ActionList.Item>
-                    ))}
-                  </ActionList>
-                </ActionMenu.Overlay>
-              </ActionMenu>
+              <CommitIshSelector
+                repoRootPath={props.repoFolderPath}
+                currentlySelectedCommitIsh={controller.state.selectedCommitIsh}
+                selectCommitIsh={(commitIsh): void =>
+                  controller.setSelectedCommitIsh(commitIsh)
+                }
+              />
             </Box>
 
             {controller.state.selectedPath.pathItems.length > 0 && (
@@ -103,12 +87,13 @@ export const RepoPage: React.FC<Props> = (props) => {
             )}
           </Box>
 
-          {controller.state.selectedBranch !== undefined && (
-            <React.Fragment>
+          {controller.state.selectedCommitIsh !== undefined && (
+            <RepoServiceContextProvider
+              repoFolderPath={props.repoFolderPath}
+              selectedCommitIsh={controller.state.selectedCommitIsh}
+            >
               {controller.state.selectedPath.type === 'tree' && (
                 <TreeDetails
-                  repoRootPath={props.repoRootPath}
-                  branch={controller.state.selectedBranch}
                   treePath={controller.state.selectedPath.pathItems}
                   selectChildTree={(childTreeName: string): void =>
                     controller.setSelectedPath(
@@ -133,12 +118,10 @@ export const RepoPage: React.FC<Props> = (props) => {
 
               {controller.state.selectedPath.type === 'blob' && (
                 <BlobDetails
-                  repoRootPath={props.repoRootPath}
-                  branch={controller.state.selectedBranch}
                   blobPath={controller.state.selectedPath.pathItems}
                 />
               )}
-            </React.Fragment>
+            </RepoServiceContextProvider>
           )}
         </PageLayout.Content>
       </PageLayout>
@@ -156,47 +139,54 @@ const ROOT_PATH: Path = {
 };
 
 interface State {
-  branches: string[];
-  selectedBranch: string | undefined;
+  selectedCommitIsh: string | undefined;
   selectedPath: Path;
 }
 interface Controller {
   state: State;
 
-  setSelectedBranch: (branch: string) => void;
+  setSelectedCommitIsh: (commitIsh: string) => void;
   setSelectedPath: (fullPath: string[], itemType: 'tree' | 'blob') => void;
 }
 function useController(props: Props): Controller {
   const [state, setState] = React.useState<State>({
-    branches: [],
-    selectedBranch: undefined,
+    selectedCommitIsh: undefined,
     selectedPath: ROOT_PATH,
   });
 
   // Whenever the selected path or branch changes, scroll the page to the top.
   React.useLayoutEffect(() => {
     window.scrollTo(0, 0);
-  }, [state.selectedBranch, state.selectedPath]);
+  }, [state.selectedCommitIsh, state.selectedPath]);
 
-  React.useEffect((): void => {
+  React.useEffect(() => {
     void (async (): Promise<void> => {
-      const branchesFetchResult = await getAllBranches(props.repoRootPath);
-      if (!branchesFetchResult.success) {
+      if (state.selectedCommitIsh === undefined) {
         return;
       }
+      const pathExistsResult = await doesPathExist({
+        repoFolderPath: props.repoFolderPath,
+        commitIsh: state.selectedCommitIsh,
+        itemPath: state.selectedPath.pathItems,
+      });
 
-      setState((state) => ({ ...state, branches: branchesFetchResult.data }));
+      if (!pathExistsResult.exists) {
+        setState((state) => ({ ...state, selectedPath: ROOT_PATH }));
+      }
     })();
-  }, [props.repoRootPath]);
+  }, [
+    props.repoFolderPath,
+    state.selectedCommitIsh,
+    state.selectedPath.pathItems,
+  ]);
 
   return {
     state: state,
 
-    setSelectedBranch: (branch): void => {
+    setSelectedCommitIsh: (commitIsh): void => {
       setState((state) => ({
         ...state,
-        selectedBranch: branch,
-        selectedPath: ROOT_PATH,
+        selectedCommitIsh: commitIsh,
       }));
     },
 

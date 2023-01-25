@@ -4,9 +4,9 @@ import React from 'react';
 
 import { CommitDetailsWithBody, getCommitDetails } from '../../ipc/git/show';
 
-interface Props {
-  repoRootPath: string;
+import { useRepoServiceContext } from './services/repo-service';
 
+interface Props {
   commitIsh: string;
 
   hide: () => void;
@@ -50,6 +50,8 @@ interface Controller {
   diffContainerRef: React.RefObject<HTMLDivElement>;
 }
 function useController(props: Props): Controller {
+  const repoService = useRepoServiceContext();
+
   const [state, setState] = React.useState<State>({
     commitDetails: undefined,
   });
@@ -59,7 +61,7 @@ function useController(props: Props): Controller {
   React.useEffect(() => {
     void (async (): Promise<void> => {
       const commitFetchResult = await getCommitDetails({
-        repoFolderPath: props.repoRootPath,
+        repoFolderPath: repoService.repoFolderPath,
         commitIsh: props.commitIsh,
       });
 
@@ -72,7 +74,7 @@ function useController(props: Props): Controller {
         commitDetails: commitFetchResult.data,
       }));
     })();
-  }, [props.commitIsh, props.repoRootPath]);
+  }, [props.commitIsh, repoService.repoFolderPath]);
 
   React.useEffect(() => {
     if (!diffContainerRef.current || !state.commitDetails) {

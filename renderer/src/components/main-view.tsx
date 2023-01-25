@@ -15,17 +15,17 @@ export const MainView: React.FC = () => {
     <React.Fragment>
       {controller.state.pageToShow === Page.Start && (
         <StartPage
-          setNewRepoRootPath={(newRepoRootPath: string): void => {
-            controller.setRepoRootPath(newRepoRootPath);
+          setNewRepoRootPath={(newRepoFolderPath: string): void => {
+            controller.setRepoFolderPath(newRepoFolderPath);
             controller.setPageToShow(Page.Repo);
           }}
         />
       )}
 
       {controller.state.pageToShow === Page.Repo &&
-        controller.state.repoRootPath !== undefined && (
+        controller.state.repoFolderPath !== undefined && (
           <RepoPage
-            repoRootPath={controller.state.repoRootPath}
+            repoFolderPath={controller.state.repoFolderPath}
             close={(): void => controller.setPageToShow(Page.Start)}
           />
         )}
@@ -34,26 +34,26 @@ export const MainView: React.FC = () => {
 };
 
 interface State {
-  repoRootPath: string | undefined;
+  repoFolderPath: string | undefined;
   pageToShow: Page;
 }
 interface Controller {
   state: State;
 
-  setRepoRootPath: (newRootPath: string) => void;
+  setRepoFolderPath: (newFolderPath: string) => void;
   setPageToShow: (page: Page) => void;
 }
 function useController(): Controller {
   const [state, setState] = React.useState<State>({
-    repoRootPath: undefined,
+    repoFolderPath: undefined,
     pageToShow: Page.Start,
   });
 
   return {
     state: state,
 
-    setRepoRootPath: (newRepoRootPath): void => {
-      setState((state) => ({ ...state, repoRootPath: newRepoRootPath }));
+    setRepoFolderPath: (newRepoFolderPath): void => {
+      setState((state) => ({ ...state, repoFolderPath: newRepoFolderPath }));
     },
     setPageToShow: (page): void => {
       setState((state) => ({ ...state, pageToShow: page }));

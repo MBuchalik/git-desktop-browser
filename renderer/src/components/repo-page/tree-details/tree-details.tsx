@@ -4,12 +4,11 @@ import React from 'react';
 
 import { TreeEntry, getTreeByPath } from '../../../ipc/git/tree';
 import { History } from '../history';
+import { useRepoServiceContext } from '../services/repo-service';
 
 import { TreeDetailsItem } from './tree-details-item';
 
 interface Props {
-  repoRootPath: string;
-  branch: string;
   treePath: string[];
 
   selectChildTree: (childTreeName: string) => void;
@@ -29,11 +28,7 @@ export const TreeDetails: React.FC<Props> = (props) => {
           </Box>
 
           {controller.state.showHistory && (
-            <History
-              repoRootPath={props.repoRootPath}
-              commitIsh={props.branch}
-              itemPath={props.treePath}
-            />
+            <History itemPath={props.treePath} />
           )}
 
           {!controller.state.showHistory && (
@@ -41,8 +36,6 @@ export const TreeDetails: React.FC<Props> = (props) => {
               {controller.sortedTreeContent.map((treeItem) => (
                 <TreeDetailsItem
                   key={`${treeItem.hash}-${treeItem.name}`}
-                  repoRootPath={props.repoRootPath}
-                  branch={props.branch}
                   treeItem={treeItem}
                   treeItemPath={[...props.treePath, treeItem.name]}
                   onClick={(): void =>
@@ -73,6 +66,8 @@ interface Controller {
   toggleShowHistory: () => void;
 }
 function useController(props: Props): Controller {
+  const repoService = useRepoServiceContext();
+
   const [state, setState] = React.useState<State>({
     treeContent: undefined,
 
@@ -82,8 +77,8 @@ function useController(props: Props): Controller {
   React.useEffect((): void => {
     void (async (): Promise<void> => {
       const treeFetchResult = await getTreeByPath({
-        repoFolderPath: props.repoRootPath,
-        commitIsh: props.branch,
+        repoFolderPath: repoService.repoFolderPath,
+        commitIsh: repoService.selectedCommitIsh,
         treePath: props.treePath,
       });
       if (!treeFetchResult.success) {
@@ -95,7 +90,11 @@ function useController(props: Props): Controller {
         treeContent: treeFetchResult.data,
       }));
     })();
-  }, [props.branch, props.repoRootPath, props.treePath]);
+  }, [
+    props.treePath,
+    repoService.repoFolderPath,
+    repoService.selectedCommitIsh,
+  ]);
 
   const sortedTreeContent = React.useMemo((): TreeEntry[] | undefined => {
     if (!state.treeContent) {

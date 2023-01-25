@@ -4,12 +4,11 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { ShortCommitDetails, getCommitHistory } from '../../../ipc/git/log';
+import { useRepoServiceContext } from '../services/repo-service';
 
 import { HistoryItem } from './history-item';
 
 interface Props {
-  repoRootPath: string;
-  commitIsh: string;
   itemPath: string[];
 }
 export const History: React.FC<Props> = (props) => {
@@ -33,7 +32,6 @@ export const History: React.FC<Props> = (props) => {
                     {commits.map((singleCommit) => (
                       <HistoryItem
                         key={singleCommit.longCommitHash}
-                        repoRootPath={props.repoRootPath}
                         commit={singleCommit}
                       />
                     ))}
@@ -55,6 +53,8 @@ interface Controller {
   state: State;
 }
 function useController(props: Props): Controller {
+  const repoService = useRepoServiceContext();
+
   const [state, setState] = React.useState<State>({
     commitHistory: undefined,
   });
@@ -62,8 +62,8 @@ function useController(props: Props): Controller {
   React.useEffect(() => {
     void (async (): Promise<void> => {
       const commitHistoryFetchResult = await getCommitHistory({
-        repoFolderPath: props.repoRootPath,
-        startCommitIsh: props.commitIsh,
+        repoFolderPath: repoService.repoFolderPath,
+        startCommitIsh: repoService.selectedCommitIsh,
         itemPath: props.itemPath,
       });
 
@@ -80,7 +80,11 @@ function useController(props: Props): Controller {
         commitHistory: groupedCommitHistory,
       }));
     })();
-  }, [props.commitIsh, props.itemPath, props.repoRootPath]);
+  }, [
+    props.itemPath,
+    repoService.repoFolderPath,
+    repoService.selectedCommitIsh,
+  ]);
 
   return {
     state: state,

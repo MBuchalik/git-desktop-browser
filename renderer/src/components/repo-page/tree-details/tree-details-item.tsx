@@ -9,11 +9,9 @@ import {
 } from '../../../ipc/git/log';
 import { TreeEntry } from '../../../ipc/git/tree';
 import { CommitDetailsDialog } from '../commit-details-dialog';
+import { useRepoServiceContext } from '../services/repo-service';
 
 interface Props {
-  repoRootPath: string;
-  branch: string;
-
   treeItem: TreeEntry;
   treeItemPath: string[];
 
@@ -109,7 +107,6 @@ export const TreeDetailsItem: React.FC<Props> = (props) => {
       {controller.state.commitDetails &&
         controller.state.showCommitDetailsDialog && (
           <CommitDetailsDialog
-            repoRootPath={props.repoRootPath}
             commitIsh={controller.state.commitDetails.longCommitHash}
             hide={(): void => controller.setShowCommitDetailsDialog(false)}
           />
@@ -129,6 +126,8 @@ interface Controller {
   setShowCommitDetailsDialog: (show: boolean) => void;
 }
 function useController(props: Props): Controller {
+  const repoService = useRepoServiceContext();
+
   const [state, setState] = React.useState<State>({
     commitDetails: undefined,
 
@@ -138,9 +137,9 @@ function useController(props: Props): Controller {
   React.useEffect(() => {
     void (async (): Promise<void> => {
       const commitFetchResult = await getLastAffectingCommit({
-        repoFolderPath: props.repoRootPath,
+        repoFolderPath: repoService.repoFolderPath,
         itemPath: props.treeItemPath,
-        startCommitIsh: props.branch,
+        startCommitIsh: repoService.selectedCommitIsh,
       });
 
       if (!commitFetchResult.success) {
@@ -152,7 +151,11 @@ function useController(props: Props): Controller {
         commitDetails: commitFetchResult.data,
       }));
     })();
-  }, [props.branch, props.repoRootPath, props.treeItemPath]);
+  }, [
+    props.treeItemPath,
+    repoService.repoFolderPath,
+    repoService.selectedCommitIsh,
+  ]);
 
   return {
     state: state,

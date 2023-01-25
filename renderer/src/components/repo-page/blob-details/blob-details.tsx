@@ -4,10 +4,9 @@ import React from 'react';
 import { getBlob } from '../../../ipc/git/blob';
 import { CodeViewer } from '../code-viewer';
 import { History } from '../history';
+import { useRepoServiceContext } from '../services/repo-service';
 
 interface Props {
-  repoRootPath: string;
-  branch: string;
   blobPath: string[];
 }
 export const BlobDetails: React.FC<Props> = (props) => {
@@ -21,13 +20,7 @@ export const BlobDetails: React.FC<Props> = (props) => {
         </Button>
       </Box>
 
-      {controller.state.showHistory && (
-        <History
-          repoRootPath={props.repoRootPath}
-          commitIsh={props.branch}
-          itemPath={props.blobPath}
-        />
-      )}
+      {controller.state.showHistory && <History itemPath={props.blobPath} />}
 
       {!controller.state.showHistory &&
         controller.state.blobContent !== undefined && (
@@ -63,6 +56,8 @@ interface Controller {
   toggleShowHistory: () => void;
 }
 function useController(props: Props): Controller {
+  const repoService = useRepoServiceContext();
+
   const [state, setState] = React.useState<State>({
     blobContent: undefined,
 
@@ -72,8 +67,8 @@ function useController(props: Props): Controller {
   React.useEffect((): void => {
     void (async (): Promise<void> => {
       const blobFetchResult = await getBlob({
-        repoFolderPath: props.repoRootPath,
-        commitIsh: props.branch,
+        repoFolderPath: repoService.repoFolderPath,
+        commitIsh: repoService.selectedCommitIsh,
         blobPath: props.blobPath,
       });
       if (!blobFetchResult.success) {
@@ -84,7 +79,11 @@ function useController(props: Props): Controller {
         blobContent: blobFetchResult.data,
       }));
     })();
-  }, [props.blobPath, props.branch, props.repoRootPath]);
+  }, [
+    props.blobPath,
+    repoService.repoFolderPath,
+    repoService.selectedCommitIsh,
+  ]);
 
   const isProbablyBinaryFile = React.useMemo((): boolean => {
     if (state.blobContent === undefined) {
