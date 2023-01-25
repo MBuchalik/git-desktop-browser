@@ -18,6 +18,8 @@ import { TreeDetails } from './tree-details';
 interface Props {
   repoFolderPath: string;
 
+  scrollMainAreaToTop: () => void;
+
   close: () => void;
 }
 export const RepoPage: React.FC<Props> = (props) => {
@@ -163,7 +165,8 @@ function useController(props: Props): Controller {
 
   // Whenever the selected path or branch changes, scroll the page to the top.
   React.useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    props.scrollMainAreaToTop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedCommitIsh, state.selectedPath]);
 
   React.useEffect(() => {

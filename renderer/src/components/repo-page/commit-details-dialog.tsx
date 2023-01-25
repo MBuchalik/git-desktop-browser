@@ -20,8 +20,9 @@ export const CommitDetailsDialog: React.FC<Props> = (props) => {
         display: 'flex',
         flexDirection: 'column',
         width: '90vw',
-        maxHeight: '90vh ',
-        marginY: '5vh',
+        maxHeight: 'calc(0.9 * var(--usable-window-height))',
+        marginY:
+          'calc(env(titlebar-area-height) + 0.05 * var(--usable-window-height))',
       }}
       isOpen
       onDismiss={(): void => props.hide()}

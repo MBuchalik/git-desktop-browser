@@ -15,7 +15,14 @@ const createWindow = (): void => {
       nodeIntegration: true,
       contextIsolation: false,
     },
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#24292f',
+      symbolColor: '#ffffff',
+    },
   });
+
+  mainWindow.maximize();
 
   void mainWindow.loadURL('http://localhost:3000');
 };

@@ -6,7 +6,7 @@ import { MainView } from './components/main-view';
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <BaseStyles>
+      <BaseStyles style={{ height: '100%' }}>
         <MainView />
       </BaseStyles>
     </ThemeProvider>

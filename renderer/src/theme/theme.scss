@@ -10,9 +10,12 @@
 @import 'highlight.js/styles/github.css';
 @import 'diff2html/bundles/css/diff2html.min.css';
 
-body {
-  overflow-x: hidden;
+html,
+body,
+#root {
+  height: 100%;
+}
 
-  // When browsing a repo or the like, it is pretty annoying if the page constantly jumps around when the content sometimes leads to a scroll bar and sometimes not.
-  overflow-y: scroll;
+:root {
+  --usable-window-height: calc(100vh - env(titlebar-area-height));
 }
