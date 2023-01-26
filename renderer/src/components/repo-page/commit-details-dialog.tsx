@@ -2,7 +2,8 @@ import { Box, Dialog } from '@primer/react';
 import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim.js';
 import React from 'react';
 
-import { CommitDetailsWithBody, getCommitDetails } from '../../ipc/git/show';
+import { getDiffForSingleCommit } from '../../ipc/git/diff';
+import { CommitDetailsWithBody, getCommitDetails } from '../../ipc/git/log';
 
 import { useRepoServiceContext } from './services/repo-service';
 
@@ -31,7 +32,7 @@ export const CommitDetailsDialog: React.FC<Props> = (props) => {
 
       {/* We need position:relative because the diff renderer seems to use some sticky positioning that otherwise does not work properly. */}
       <Box sx={{ flexGrow: 1, overflow: 'auto', position: 'relative' }}>
-        {controller.state.commitDetails && (
+        {controller.state.commit && (
           <div
             ref={controller.diffContainerRef}
             style={{ padding: '1rem' }}
@@ -42,8 +43,12 @@ export const CommitDetailsDialog: React.FC<Props> = (props) => {
   );
 };
 
+interface CommitDetailsAndDiff {
+  commitDetails: CommitDetailsWithBody;
+  diff: string;
+}
 interface State {
-  commitDetails: CommitDetailsWithBody | undefined;
+  commit: CommitDetailsAndDiff | undefined;
 }
 interface Controller {
   state: State;
@@ -54,7 +59,7 @@ function useController(props: Props): Controller {
   const repoService = useRepoServiceContext();
 
   const [state, setState] = React.useState<State>({
-    commitDetails: undefined,
+    commit: undefined,
   });
 
   const diffContainerRef = React.useRef<HTMLDivElement>(null);
@@ -65,20 +70,30 @@ function useController(props: Props): Controller {
         repoFolderPath: repoService.repoFolderPath,
         commitIsh: props.commitIsh,
       });
-
       if (!commitFetchResult.success) {
+        return;
+      }
+
+      const diffFetchResult = await getDiffForSingleCommit({
+        repoFolderPath: repoService.repoFolderPath,
+        commitIsh: props.commitIsh,
+      });
+      if (!diffFetchResult.success) {
         return;
       }
 
       setState((state) => ({
         ...state,
-        commitDetails: commitFetchResult.data,
+        commit: {
+          commitDetails: commitFetchResult.data,
+          diff: diffFetchResult.data,
+        },
       }));
     })();
   }, [props.commitIsh, repoService.repoFolderPath]);
 
   React.useEffect(() => {
-    if (!diffContainerRef.current || !state.commitDetails) {
+    if (!diffContainerRef.current || !state.commit) {
       return;
     }
     diffContainerRef.current.innerHTML = '';
@@ -89,11 +104,11 @@ function useController(props: Props): Controller {
     */
     const diff2html = new Diff2HtmlUI(
       diffContainerRef.current,
-      state.commitDetails.body,
+      state.commit.diff,
       { outputFormat: 'side-by-side' },
     );
     diff2html.draw();
-  }, [state.commitDetails]);
+  }, [state.commit]);
 
   return {
     state: state,

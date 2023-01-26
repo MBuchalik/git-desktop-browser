@@ -106,3 +106,49 @@ function buildPathArguments(itemPath: string[]): string[] {
     joinedPath,
   ];
 }
+
+export interface CommitDetailsWithBody extends ShortCommitDetails {
+  body: string;
+}
+
+export async function getCommitDetails(params: {
+  repoFolderPath: string;
+  commitIsh: string;
+}): Promise<Result<CommitDetailsWithBody>> {
+  const formatter = createFormatter({
+    longCommitHash: '%H',
+    shortCommitHash: '%h',
+    authorDate: '%at',
+    authorEmail: '%ae',
+    subject: '%s',
+    body: '%b',
+  });
+
+  const dugiteResult = await runDugiteCommand(
+    ['log', '-n', '1', params.commitIsh, ...formatter.formatParams],
+    params.repoFolderPath,
+  );
+
+  if (dugiteResult.exitCode !== 0) {
+    return {
+      success: false,
+    };
+  }
+
+  const formatterResult = formatter.format(dugiteResult.stdout);
+
+  const resultItem = formatterResult[0];
+  if (formatterResult.length !== 1 || !resultItem) {
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+    data: {
+      ...resultItem,
+      authorDate: Number.parseInt(resultItem.authorDate, 10),
+    },
+  };
+}
