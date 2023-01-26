@@ -22,7 +22,7 @@ export const DeletionDialog: React.FC<Props> = (props) => {
         >
           <Button onClick={(): void => props.close()}>Cancel</Button>
           <Button variant="danger" onClick={(): void => props.delete()}>
-            Delete
+            Remove
           </Button>
         </Box>
       </Box>
