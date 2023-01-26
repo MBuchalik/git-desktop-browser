@@ -19,3 +19,7 @@ body,
 :root {
   --usable-window-height: calc(100vh - env(titlebar-area-height));
 }
+
+* {
+  user-select: none;
+}

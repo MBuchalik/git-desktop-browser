@@ -4,8 +4,11 @@ import { markdown } from '@codemirror/lang-markdown';
 import { LanguageSupport } from '@codemirror/language';
 import { EditorState, Extension } from '@codemirror/state';
 import { lineNumbers } from '@codemirror/view';
+import classNames from 'classnames';
 import { EditorView, minimalSetup } from 'codemirror';
 import React from 'react';
+
+import styles from './code-viewer.module.scss';
 
 interface Props {
   code: string;
@@ -18,7 +21,12 @@ interface Props {
 export const CodeViewer: React.FC<Props> = (props) => {
   const controller = useController(props);
 
-  return <div ref={controller.containerRef}></div>;
+  return (
+    <div
+      ref={controller.containerRef}
+      className={classNames(styles.container)}
+    ></div>
+  );
 };
 
 interface Controller {
