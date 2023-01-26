@@ -19,6 +19,7 @@
     "diff2html": "^3.4.31",
     "highlight.js": "^11.7.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.6"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
+    "@types/react-beautiful-dnd": "^13.1.3",
     "@types/react-dom": "^18.0.10",
     "@types/styled-components": "5.1.26",
     "sass": "^1.57.1"
