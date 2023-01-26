@@ -14,6 +14,7 @@ const createWindow = (): void => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      spellcheck: false,
     },
     titleBarStyle: 'hidden',
     titleBarOverlay: {
