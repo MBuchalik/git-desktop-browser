@@ -10,7 +10,8 @@
   "scripts": {
     "lint": "npm run lint --workspaces && npm run lint-additional-files",
     "lint-additional-files": "prettier --check **/*.{md,json,yml}",
-    "electron-start": "npm run build -w=main-process && electron ."
+    "electron-start": "npm run build -w=main-process && electron .",
+    "prepare-main-files": "npm run build -w=main-process && npm run build -w=renderer && shx cp -r renderer/build/ main-process/build/renderer/"
   },
   "dependencies": {
     "dugite": "^2.3.0",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "electron": "^22.0.3",
     "eslint-config-mbuchalik": "^1.1.0",
+    "shx": "^0.3.4",
     "typescript": "^4.9.4"
   }
 }

@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { GitProcess, IGitExecutionOptions } from 'dugite';
 import {
   BrowserWindow,
@@ -6,6 +8,8 @@ import {
   dialog,
   ipcMain,
 } from 'electron';
+
+const DEV_MODE = !app.isPackaged;
 
 let mainWindow: BrowserWindow | undefined;
 
@@ -25,7 +29,11 @@ const createWindow = (): void => {
 
   mainWindow.maximize();
 
-  void mainWindow.loadURL('http://localhost:3000');
+  if (DEV_MODE) {
+    void mainWindow.loadURL('http://localhost:3000');
+  } else {
+    void mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  }
 };
 
 void app.whenReady().then(() => {

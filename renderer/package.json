@@ -2,6 +2,8 @@
   "name": "git-desktop-browser--renderer",
   "version": "0.0.1",
   "private": true,
+  "//": "We need to set 'homepage' to '.' so that our main JS file is loaded from a relative path like './static/...' instead of '/static/...'",
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
