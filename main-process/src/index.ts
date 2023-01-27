@@ -9,6 +9,16 @@ import {
   ipcMain,
 } from 'electron';
 
+/*
+  Handle startup events by Squirrel.
+  This is for instance necessary so that an application shortcut is created on the first run,
+  or to properly handle uninstalls.
+*/
+// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+if (require('electron-squirrel-startup')) {
+  process.exit();
+}
+
 const DEV_MODE = !app.isPackaged;
 
 let mainWindow: BrowserWindow | undefined;

@@ -2,22 +2,33 @@
   "name": "git-desktop-browser",
   "version": "0.0.1",
   "private": true,
+  "author": "Martin Buchalik",
+  "description": "Browse Git repositories on your local machine.",
   "main": "main-process/build/index.js",
   "workspaces": [
     "./main-process",
     "./renderer"
   ],
   "scripts": {
+    "clean": "rimraf out/ && npm run clean --workspaces",
     "lint": "npm run lint --workspaces && npm run lint-additional-files",
     "lint-additional-files": "prettier --check **/*.{md,json,yml}",
-    "electron-start": "npm run build -w=main-process && electron .",
-    "prepare-main-files": "npm run build -w=main-process && npm run build -w=renderer && shx cp -r renderer/build/ main-process/build/renderer/"
+    "electron-start": "npm run build -w=main-process && electron-forge start",
+    "prepare-main-files": "npm run build -w=main-process && npm run build -w=renderer && shx cp -r renderer/build/ main-process/build/renderer/",
+    "package": "npm run clean && npm run prepare-main-files && electron-forge package",
+    "make": "npm run clean && npm run prepare-main-files && electron-forge make"
   },
   "dependencies": {
     "dugite": "^2.3.0",
+    "electron-squirrel-startup": "^1.0.0",
     "micro-result": "^1.0.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
     "electron": "^22.0.3",
     "eslint-config-mbuchalik": "^1.1.0",
     "shx": "^0.3.4",

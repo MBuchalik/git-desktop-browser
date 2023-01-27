@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "rimraf build && tsc",
+    "clean": "rimraf build/",
+    "build": "npm run clean && tsc",
     "lint": "eslint src --max-warnings=0"
   },
   "devDependencies": {

@@ -6,7 +6,8 @@
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "clean": "rimraf build/",
+    "build": "npm run clean && react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint src --max-warnings=0"
   },
