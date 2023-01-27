@@ -46,6 +46,8 @@ const createWindow = (): void => {
   }
 };
 
+app.setName('Git Desktop Browser');
+
 void app.whenReady().then(() => {
   createWindow();
 

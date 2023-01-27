@@ -1,5 +1,7 @@
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    name: 'Git Desktop Browser',
+  },
   rebuildConfig: {},
   makers: [
     {
