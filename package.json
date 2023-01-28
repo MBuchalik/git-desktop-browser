@@ -13,10 +13,10 @@
     "clean": "rimraf out/ && npm run clean --workspaces",
     "lint": "npm run lint --workspaces && npm run lint-additional-files",
     "lint-additional-files": "prettier --check **/*.{md,json,yml}",
-    "electron-start": "npm run build -w=main-process && electron-forge start",
+    "electron-start": "npm run build -w=main-process && electron-forge start -- --buildMode=dev",
     "prepare-main-files": "npm run build -w=main-process && npm run build -w=renderer && shx cp -r renderer/build/ main-process/build/renderer/",
-    "package": "npm run clean && npm run prepare-main-files && electron-forge package",
-    "make": "npm run clean && npm run prepare-main-files && electron-forge make"
+    "make-prod": "npm run clean && npm run prepare-main-files && electron-forge make -- --buildMode=prod",
+    "make-dev": "npm run clean && npm run prepare-main-files && electron-forge make -- --buildMode=dev"
   },
   "dependencies": {
     "dugite": "^2.3.0",
