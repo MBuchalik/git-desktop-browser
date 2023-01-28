@@ -24,3 +24,11 @@ Please note the following:
 
 - When running the installer, Windows might say that the file is coming from an unknown source and is thus dangerous. This is because we currently do not code-sign the application and because the application is not installed on many computers. Once more people have installed it on their machines, the message should disappear.
 - We do not have an auto-update mechanism yet, so please check out the releases page from time to time.
+
+## Screenshots
+
+<img src="./screenshots/start-page.png" width="100%">
+<img src="./screenshots/repo-root.png" width="100%">
+<img src="./screenshots/file-details.png" width="100%">
+<img src="./screenshots/commit-history.png" width="100%">
+<img src="./screenshots/commit-details.png" width="100%">
