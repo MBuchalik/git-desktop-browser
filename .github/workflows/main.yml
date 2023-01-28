@@ -4,7 +4,6 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   lint:
-    name: Lint everything
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +23,8 @@ jobs:
         run: npm run lint
 
   build:
-    name: Build the frontend
+    needs: lint
+
     runs-on: ubuntu-latest
 
     steps:
