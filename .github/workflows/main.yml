@@ -40,6 +40,9 @@ jobs:
       - name: Build the project
         run: npm run build --workspaces
 
+      - name: Create the exe file
+        run: npm run make-prod
+
   make-windows:
     if: github.event_name == 'release'
     needs: build
