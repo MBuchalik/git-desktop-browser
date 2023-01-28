@@ -16,6 +16,8 @@ There are many graphical and CLI applications for Git that enable to to **write*
 
 ## Installing
 
-Currently, `Git Desktop Browser` is only available for Windows. Simply download the latest release from the[releases page](https://github.com/MBuchalik/git-desktop-browser/releases).
+Currently, `Git Desktop Browser` is only available for Windows.
+
+To install the application, simply download the latest release `.exe` file from the [releases page](https://github.com/MBuchalik/git-desktop-browser/releases/latest) and run it.
 
 > We do not have an auto-update mechanism yet, so please check out the releases page from time to time.
