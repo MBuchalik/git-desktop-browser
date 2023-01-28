@@ -52,6 +52,7 @@ module.exports = {
 
         icon: `assets/application-icons/${logoNameWithoutSuffix}.ico`,
         setupIcon: `assets/application-icons/${logoNameWithoutSuffix}.ico`,
+        loadingGif: 'assets/installer-gif/installer-gif.gif',
       },
     },
     {
