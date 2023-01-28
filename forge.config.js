@@ -29,6 +29,12 @@ module.exports = {
       [BUILD_MODE_PRODUCTION]: 'git-desktop-browser',
       [BUILD_MODE_DEVELOPMENT]: 'git-desktop-browser-dev',
     }),
+    ignore: [
+      // If we don't specify this, we get a huge executable that includes all of our project files. electron-builder by default only prunes the root node_modules folder, but copies everything else as-is.
+      new RegExp(/^\/(?!(package\.json)|(node_modules)|(main-process))/),
+      // Only keep the `build` directory in the `main-process` directory. (This could also have been done with the first Regex, but separating this makes everything a bit easier to understand.)
+      new RegExp(/^\/main-process\/(?!(build))/),
+    ],
   },
   rebuildConfig: {},
   makers: [
