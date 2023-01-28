@@ -18,6 +18,9 @@ if (!knownBuildModes.includes(buildMode)) {
   throw Error('Unknown value for the Build Mode flag.');
 }
 
+const logoNameWithoutSuffix =
+  buildMode === BUILD_MODE_DEVELOPMENT ? 'logo-dev' : 'logo';
+
 module.exports = {
   buildIdentifier: buildMode,
   packagerConfig: {
@@ -35,6 +38,7 @@ module.exports = {
       // Only keep the `build` directory in the `main-process` directory. (This could also have been done with the first Regex, but separating this makes everything a bit easier to understand.)
       new RegExp(/^\/main-process\/(?!(build))/),
     ],
+    icon: `assets/application-icons/${logoNameWithoutSuffix}`,
   },
   rebuildConfig: {},
   makers: [
@@ -45,6 +49,9 @@ module.exports = {
           buildMode === BUILD_MODE_PRODUCTION
             ? 'git-desktop-browser'
             : 'git-desktop-browser-dev',
+
+        icon: `assets/application-icons/${logoNameWithoutSuffix}.ico`,
+        setupIcon: `assets/application-icons/${logoNameWithoutSuffix}.ico`,
       },
     },
     {
