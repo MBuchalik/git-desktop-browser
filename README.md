@@ -20,4 +20,7 @@ Currently, `Git Desktop Browser` is only available for Windows.
 
 To install the application, simply download the latest release `.exe` file from the [releases page](https://github.com/MBuchalik/git-desktop-browser/releases/latest) and run it.
 
-> We do not have an auto-update mechanism yet, so please check out the releases page from time to time.
+Please note the following:
+
+- When running the installer, Windows might say that the file is coming from an unknown source and is thus dangerous. This is because we currently do not code-sign the application and because the application is not installed on many computers. Once more people have installed it on their machines, the message should disappear.
+- We do not have an auto-update mechanism yet, so please check out the releases page from time to time.
