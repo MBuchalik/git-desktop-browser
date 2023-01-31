@@ -11,6 +11,7 @@ import React from 'react';
 
 import { getAllBranches } from '../../ipc/git/branch';
 import { getAllTags } from '../../ipc/git/tag';
+import { merge } from '../../utils/merge';
 
 enum MenuTab {
   Branches,
@@ -146,13 +147,14 @@ function useController(props: Props): Controller {
         return;
       }
 
-      setState((state) => ({
-        ...state,
-        branchesAndTags: {
-          branches: branchesFetchResult.data,
-          tags: tagsFetchResult.data,
-        },
-      }));
+      setState((state) =>
+        merge(state, {
+          branchesAndTags: {
+            branches: branchesFetchResult.data,
+            tags: tagsFetchResult.data,
+          },
+        }),
+      );
     })();
   }, [props.repoRootPath]);
 
@@ -187,11 +189,11 @@ function useController(props: Props): Controller {
     currentCommitIshList: currentCommitIshList,
 
     setIsMenuOpen: (isOpen): void => {
-      setState((state) => ({ ...state, isMenuOpen: isOpen }));
+      setState((state) => merge(state, { isMenuOpen: isOpen }));
     },
 
     setActiveMenuTab: (menuTab): void => {
-      setState((state) => ({ ...state, activeMenuTab: menuTab }));
+      setState((state) => merge(state, { activeMenuTab: menuTab }));
     },
   };
 }

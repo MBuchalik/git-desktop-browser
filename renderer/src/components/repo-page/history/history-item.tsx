@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { ShortCommitDetails } from '../../../ipc/git/log';
+import { merge } from '../../../utils/merge';
 import { CommitDetailsDialog } from '../commit-details-dialog';
 import { useRepoServiceContext } from '../services/repo-service';
 
@@ -86,7 +87,7 @@ function useController(props: Props): Controller {
     state: state,
 
     setShowCommitDetailsDialog: (show): void => {
-      setState((state) => ({ ...state, showCommitDetailsDialog: show }));
+      setState((state) => merge(state, { showCommitDetailsDialog: show }));
     },
 
     browseRepositoryAtThisCommit: (): void => {

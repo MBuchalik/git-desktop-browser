@@ -4,6 +4,7 @@ import React from 'react';
 
 import { getRepoRootPath } from '../../ipc/git/repo';
 import { showOpenDialog } from '../../ipc/ipc-bridge';
+import { merge } from '../../utils/merge';
 
 import { REPOSITORY_LIST_LOCALSTORAGE_KEY, RepositoryEntry } from './models';
 import { RepositoryList } from './repository-list';
@@ -127,7 +128,7 @@ function useController(props: Props): Controller {
     state: state,
 
     setRepositoryList: (repositoryList): void => {
-      setState((state) => ({ ...state, repositoryList: repositoryList }));
+      setState((state) => merge(state, { repositoryList: repositoryList }));
     },
 
     openFolderPicker: async (): Promise<void> => {
@@ -146,7 +147,9 @@ function useController(props: Props): Controller {
 
       const repoRootPathFetchResult = await getRepoRootPath(theFolderPath);
       if (!repoRootPathFetchResult.success) {
-        setState((state) => ({ ...state, selectedFolderPathIsNotRepo: true }));
+        setState((state) =>
+          merge(state, { selectedFolderPathIsNotRepo: true }),
+        );
         return;
       }
 
@@ -172,7 +175,9 @@ function useController(props: Props): Controller {
         repository.fileSystemPath,
       );
       if (!repoRootPathFetchResult.success) {
-        setState((state) => ({ ...state, selectedFolderPathIsNotRepo: true }));
+        setState((state) =>
+          merge(state, { selectedFolderPathIsNotRepo: true }),
+        );
         return;
       }
 

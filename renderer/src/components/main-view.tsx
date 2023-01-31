@@ -1,6 +1,8 @@
 import { Box } from '@primer/react';
 import React from 'react';
 
+import { merge } from '../utils/merge';
+
 import { RepoPage } from './repo-page';
 import { StartPage } from './start-page';
 
@@ -91,10 +93,10 @@ function useController(): Controller {
     scrollContainerRef: scrollContainerRef,
 
     setRepoFolderPath: (newRepoFolderPath): void => {
-      setState((state) => ({ ...state, repoFolderPath: newRepoFolderPath }));
+      setState((state) => merge(state, { repoFolderPath: newRepoFolderPath }));
     },
     setPageToShow: (page): void => {
-      setState((state) => ({ ...state, pageToShow: page }));
+      setState((state) => merge(state, { pageToShow: page }));
     },
 
     scrollMainAreaToTop: (): void => {

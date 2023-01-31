@@ -2,6 +2,7 @@ import { Box, Button } from '@primer/react';
 import React from 'react';
 
 import { getBlob } from '../../../ipc/git/blob';
+import { merge } from '../../../utils/merge';
 import { CodeViewer } from '../code-viewer';
 import { History } from '../history';
 import { useRepoServiceContext } from '../services/repo-service';
@@ -79,10 +80,7 @@ function useController(props: Props): Controller {
       if (!blobFetchResult.success) {
         return;
       }
-      setState((state) => ({
-        ...state,
-        blobContent: blobFetchResult.data,
-      }));
+      setState((state) => merge(state, { blobContent: blobFetchResult.data }));
     })();
   }, [
     props.blobPath,
@@ -131,7 +129,7 @@ function useController(props: Props): Controller {
     fileExtension: fileExtension,
 
     toggleShowHistory: (): void => {
-      setState((state) => ({ ...state, showHistory: !state.showHistory }));
+      setState((state) => merge(state, { showHistory: !state.showHistory }));
     },
   };
 }

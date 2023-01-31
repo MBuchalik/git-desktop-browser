@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { ShortCommitDetails, getCommitHistory } from '../../../ipc/git/log';
+import { merge } from '../../../utils/merge';
 import { useRepoServiceContext } from '../services/repo-service';
 
 import { HistoryItem } from './history-item';
@@ -78,10 +79,9 @@ function useController(props: Props): Controller {
         commitHistoryFetchResult.data,
       );
 
-      setState((state) => ({
-        ...state,
-        commitHistory: groupedCommitHistory,
-      }));
+      setState((state) =>
+        merge(state, { commitHistory: groupedCommitHistory }),
+      );
     })();
   }, [
     props.itemPath,

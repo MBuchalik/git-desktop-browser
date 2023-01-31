@@ -9,6 +9,7 @@ import {
 import React from 'react';
 
 import { doesPathExist } from '../../ipc/git/show';
+import { merge } from '../../utils/merge';
 
 import { BlobDetails } from './blob-details';
 import { CommitIshSelector } from './commitish-selector';
@@ -181,7 +182,7 @@ function useController(props: Props): Controller {
       });
 
       if (!pathExistsResult.exists) {
-        setState((state) => ({ ...state, selectedPath: ROOT_PATH }));
+        setState((state) => merge(state, { selectedPath: ROOT_PATH }));
       }
     })();
   }, [
@@ -194,17 +195,11 @@ function useController(props: Props): Controller {
     state: state,
 
     setSelectedCommitIsh: (commitIsh): void => {
-      setState((state) => ({
-        ...state,
-        selectedCommitIsh: commitIsh,
-      }));
+      setState((state) => merge(state, { selectedCommitIsh: commitIsh }));
     },
 
     setSelectedPath: (path): void => {
-      setState((state) => ({
-        ...state,
-        selectedPath: path,
-      }));
+      setState((state) => merge(state, { selectedPath: path }));
     },
   };
 }

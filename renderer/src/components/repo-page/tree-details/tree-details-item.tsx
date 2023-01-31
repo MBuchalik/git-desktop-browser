@@ -8,6 +8,7 @@ import {
   getLastAffectingCommit,
 } from '../../../ipc/git/log';
 import { TreeEntry } from '../../../ipc/git/tree';
+import { merge } from '../../../utils/merge';
 import { CommitDetailsDialog } from '../commit-details-dialog';
 import { useRepoServiceContext } from '../services/repo-service';
 
@@ -146,10 +147,9 @@ function useController(props: Props): Controller {
         return;
       }
 
-      setState((state) => ({
-        ...state,
-        commitDetails: commitFetchResult.data,
-      }));
+      setState((state) =>
+        merge(state, { commitDetails: commitFetchResult.data }),
+      );
     })();
   }, [
     props.treeItemPath,
@@ -161,7 +161,7 @@ function useController(props: Props): Controller {
     state: state,
 
     setShowCommitDetailsDialog: (show): void => {
-      setState((state) => ({ ...state, showCommitDetailsDialog: show }));
+      setState((state) => merge(state, { showCommitDetailsDialog: show }));
     },
   };
 }

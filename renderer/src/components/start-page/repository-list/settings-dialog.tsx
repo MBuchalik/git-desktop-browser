@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, FormControl, TextInput } from '@primer/react';
 import React from 'react';
 
+import { merge } from '../../../utils/merge';
 import { RepositoryEntry } from '../models';
 
 interface Props {
@@ -71,7 +72,7 @@ function useController(props: Props): Controller {
     state: state,
 
     setRepositoryName: (name): void => {
-      setState((state) => ({ ...state, repositoryName: name }));
+      setState((state) => merge(state, { repositoryName: name }));
     },
 
     save: (): void => {

@@ -4,6 +4,7 @@ import React from 'react';
 
 import { getDiffForSingleCommit } from '../../ipc/git/diff';
 import { CommitDetailsWithBody, getCommitDetails } from '../../ipc/git/log';
+import { merge } from '../../utils/merge';
 
 import { useRepoServiceContext } from './services/repo-service';
 
@@ -82,13 +83,14 @@ function useController(props: Props): Controller {
         return;
       }
 
-      setState((state) => ({
-        ...state,
-        commit: {
-          commitDetails: commitFetchResult.data,
-          diff: diffFetchResult.data,
-        },
-      }));
+      setState((state) =>
+        merge(state, {
+          commit: {
+            commitDetails: commitFetchResult.data,
+            diff: diffFetchResult.data,
+          },
+        }),
+      );
     })();
   }, [props.commitIsh, repoService.repoFolderPath]);
 

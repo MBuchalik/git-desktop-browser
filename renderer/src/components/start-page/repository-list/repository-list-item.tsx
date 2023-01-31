@@ -3,6 +3,7 @@ import { Box, IconButton } from '@primer/react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
+import { merge } from '../../../utils/merge';
 import { RepositoryEntry } from '../models';
 
 import { DeletionDialog } from './deletion-dialog';
@@ -151,10 +152,10 @@ function useController(): Controller {
     state: state,
 
     setShowSettingsDialog: (show): void => {
-      setState((state) => ({ ...state, showSettingsDialog: show }));
+      setState((state) => merge(state, { showSettingsDialog: show }));
     },
     setShowDeletionDialog: (show): void => {
-      setState((state) => ({ ...state, showDeletionDialog: show }));
+      setState((state) => merge(state, { showDeletionDialog: show }));
     },
   };
 }

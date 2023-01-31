@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { TreeEntry, getTreeByPath } from '../../../ipc/git/tree';
+import { merge } from '../../../utils/merge';
 import { History } from '../history';
 import { useRepoServiceContext } from '../services/repo-service';
 
@@ -88,10 +89,7 @@ function useController(props: Props): Controller {
         return;
       }
 
-      setState((state) => ({
-        ...state,
-        treeContent: treeFetchResult.data,
-      }));
+      setState((state) => merge(state, { treeContent: treeFetchResult.data }));
     })();
   }, [
     props.treePath,
@@ -125,7 +123,7 @@ function useController(props: Props): Controller {
     sortedTreeContent: sortedTreeContent,
 
     toggleShowHistory: (): void => {
-      setState((state) => ({ ...state, showHistory: !state.showHistory }));
+      setState((state) => merge(state, { showHistory: !state.showHistory }));
     },
   };
 }
