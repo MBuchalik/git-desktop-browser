@@ -1,8 +1,8 @@
 <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="112" y="112" width="800" height="800" rx="130" fill="#D98080"/>
-<rect x="344.388" y="591.44" width="80" height="80" rx="40" transform="rotate(27.0551 344.388 591.44)" fill="white"/>
-<rect x="576.388" y="324" width="80" height="80" rx="40" transform="rotate(27.0551 576.388 324)" fill="white"/>
-<rect x="647.7" y="494.342" width="70" height="70" rx="35" transform="rotate(27.0551 647.7 494.342)" stroke="white" stroke-width="10"/>
-<line x1="372.155" y1="625.278" x2="571.863" y2="401.411" stroke="white" stroke-width="10"/>
-<path d="M397.034 598.192L418.209 574.343C444.877 544.306 483.933 528.283 524.013 530.938L627.204 537.772" stroke="white" stroke-width="10"/>
+<rect x="309" y="645.72" width="80" height="80" rx="40" transform="rotate(-48.2331 309 645.72)" fill="white"/>
+<rect x="542.135" y="384.669" width="80" height="80" rx="40" transform="rotate(-48.2331 542.135 384.669)" fill="white"/>
+<rect x="640" y="506" width="70" height="70" rx="35" stroke="white" stroke-width="10"/>
+<path d="M390.79 614.187L573.302 409.821" stroke="white" stroke-width="10"/>
+<path d="M391.5 613.5L430.491 570.115V570.115C455.108 542.724 490.938 528.151 527.685 530.585L636.204 537.772" stroke="white" stroke-width="10"/>
 </svg>
