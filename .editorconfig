@@ -1,2 +1,2 @@
-# Avoid Prettier (or similar tools) to load .editorconfig files from the parent folder (or its parent folder or...).
+# Make sure that Prettier (or similar tools) do not load .editorconfig files from the parent folder (or its parent folder or...).
 root = true
