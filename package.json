@@ -19,19 +19,20 @@
     "make-dev": "npm run clean && npm run prepare-main-files && electron-forge make -- --buildMode=dev"
   },
   "dependencies": {
-    "dugite": "^2.3.0",
+    "dugite": "^2.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "micro-result": "^1.0.1"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.4",
-    "@electron-forge/maker-deb": "^6.0.4",
-    "@electron-forge/maker-rpm": "^6.0.4",
-    "@electron-forge/maker-squirrel": "^6.0.4",
-    "@electron-forge/maker-zip": "^6.0.4",
-    "electron": "^22.0.3",
+    "@electron-forge/cli": "^6.0.5",
+    "@electron-forge/maker-deb": "^6.0.5",
+    "@electron-forge/maker-rpm": "^6.0.5",
+    "@electron-forge/maker-squirrel": "^6.0.5",
+    "@electron-forge/maker-zip": "^6.0.5",
+    "electron": "^23.1.3",
     "eslint-config-mbuchalik": "^1.1.0",
+    "rimraf": "^3.0.2",
     "shx": "^0.3.4",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   }
 }
