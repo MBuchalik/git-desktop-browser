@@ -1,6 +1,5 @@
 {
   "name": "git-desktop-browser--main-process",
-  "version": "0.0.1",
   "private": true,
   "scripts": {
     "clean": "rimraf build/",
