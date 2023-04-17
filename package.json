@@ -1,6 +1,6 @@
 {
   "name": "git-desktop-browser",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "author": "Martin Buchalik",
   "description": "Browse Git repositories on your local machine.",
